@@ -12,7 +12,5 @@
           (GT.yield))))))
 
 (defn main []
-  (do
-    (GT.init)
-    (for [i 0 270] (GT.go f))
-    (GT.ret 0)))
+  (GT.with-gt
+    (for [i 0 270] (GT.go f))))

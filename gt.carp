@@ -7,4 +7,7 @@
   (register stop (Fn [] ()) "gt_stop")
   (register yield (Fn [] ()) "gt_yield")
   (register go (Fn [(Fn [] ())] ()) "gt_go")
+
+  (defmacro with-gt [form]
+    (list 'do '(GT.init) form '(GT.ret 0)))
 )
