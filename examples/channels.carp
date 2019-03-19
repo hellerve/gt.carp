@@ -1,0 +1,25 @@
+(load "gt.carp")
+
+(def chan1 (the (Chan String) (Chan.new)))
+(def chan2 (the (Chan String) (Chan.new)))
+
+(defn sender []
+  (do
+    (Chan.put &chan1 @"hi")
+    (Chan.put &chan2 @"also hi")))
+
+(defn receiver1 []
+  (Chan.select
+    chan1 (fn [elem] (IO.println &(fmt "Receiver 1 got %s" &elem)))
+    chan2 (fn [elem] (IO.println &(fmt "Receiver 1 got %s" &elem)))))
+
+(defn receiver2 []
+  (Chan.select
+    chan1 (fn [elem] (IO.println &(fmt "Receiver 2 got %s" &elem)))
+    chan2 (fn [elem] (IO.println &(fmt "Receiver 2 got %s" &elem)))))
+
+(defn main []
+  (GT.with-gt-do
+    (GT.go sender)
+    (GT.go receiver1)
+    (GT.go receiver2)))

@@ -10,4 +10,43 @@
 
   (defmacro with-gt [form]
     (list 'do '(GT.init) form '(GT.ret 0)))
+
+  (defmacro with-gt-do [:rest forms]
+    (cons-last '(GT.ret 0) (cons 'do (cons '(GT.init) forms))))
+)
+
+(deftype (Chan a) [mailbox (Array a)])
+(deftype (ChanResult a)
+  (Result [a])
+  (NotReady [])
+)
+
+(defmodule Chan
+  (defn new [] (init []))
+
+  (defmacro take [chan]
+    (list 'let (array 'mail (list 'Chan.mailbox (list 'ref chan)))
+      (list 'match '(Array.first mail)
+        '(Maybe.Just fst)
+          (list 'do
+            (list 'set! chan '(Chan.init (Array.suffix-array mail 1)))
+            '(ChanResult.Result fst))
+        '(Maybe.Nothing) '(ChanResult.NotReady))))
+
+  (defmacro put [chan elem]
+    (list 'Array.push-back! (list 'Chan.mailbox chan) elem))
+
+  (defndynamic select-internal [xs]
+    (if (= (length xs) 0)
+      (list)
+      (if (= (length xs) 1)
+        (macro-error "select has an odd number of branches!")
+          (list 'match (list 'Chan.take (car xs))
+            '(ChanResult.Result res) (list (cadr xs) 'res)
+            '(ChanResult.NotReady)
+              (if (= (length xs) 2)
+                '(GT.yield)
+                (Chan.select-internal (cddr xs)))))))
+
+  (defmacro select [:rest xs] (Chan.select-internal xs))
 )
