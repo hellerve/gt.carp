@@ -1,0 +1,10 @@
+(relative-include "lib/gt.h")
+(add-cflag "-lgt -Isrc -g")
+
+(defmodule GT
+  (register init (Fn [] ()) "gt_init")
+  (register ret (Fn [Int] ()) "gt_ret")
+  (register stop (Fn [] ()) "gt_stop")
+  (register yield (Fn [] ()) "gt_yield")
+  (register go (Fn [(Fn [] ())] ()) "gt_go")
+)
