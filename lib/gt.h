@@ -22,7 +22,7 @@ struct gt {
 };
 
 void gt_init();
-void gt_ret();
+void gt_ret(int ret);
 void gt_stop();
 bool gt_yield();
 void gt_go(gt_fn);
