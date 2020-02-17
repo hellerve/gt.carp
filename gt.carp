@@ -29,7 +29,7 @@
       (list 'match '(Array.first mail)
         '(Maybe.Just fst)
           (list 'do
-            (list 'set! chan '(Chan.init (Array.suffix-array mail 1)))
+            (list 'set! chan '(Chan.init (Array.suffix mail 1)))
             '(ChanResult.Result fst))
         '(Maybe.Nothing) '(ChanResult.NotReady))))
 
