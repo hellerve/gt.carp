@@ -22,4 +22,7 @@ jobs:
       - name: Run tests
         run: |
           set -euo pipefail
+          make
+          mkdir -p archive/gt.carp
+          ln -sfn "$(pwd)/bin" archive/gt.carp/bin
           carp -x examples/print.carp
