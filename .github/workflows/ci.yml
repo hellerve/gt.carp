@@ -22,4 +22,4 @@ jobs:
       - name: Run tests
         run: |
           set -euo pipefail
-          carp -x test/basic.carp
+          carp -x examples/print.carp
